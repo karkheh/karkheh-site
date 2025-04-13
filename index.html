@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سفارش‌گیری کرخه</title>
+    <style>
+        body {font-family: sans-serif; text-align: center; background: #f9f9f9; margin: 0; padding: 20px;}
+        .logo {width: 200px; margin: 10px auto;}
+        table {width: 100%; max-width: 700px; margin: 20px auto; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;}
+        th, td {padding: 10px; border-bottom: 1px solid #ddd; text-align: center;}
+        th {background: #25d366; color: white;}
+        input {width: 60px; text-align: center; font-size: 16px; padding: 5px;}
+        .buttons {margin-top: 20px;}
+        .buttons a {display: inline-block; margin: 10px; padding: 10px 20px; background: #25d366; color: white; text-decoration: none; border-radius: 8px;}
+        .buttons a.rubika {background: #4b0082;}
+    </style>
+</head>
+<body>
+    <img src="001.jpg" class="logo" alt="Karkheh Logo">
+    <h2>سفارش‌گیری کرخه</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>کد محصول</th>
+                <th>نام محصول</th>
+                <th>تعداد</th>
+                <th>وزن</th>
+                <th>سفارش</th>
+            </tr>
+        </thead>
+        <tbody id="product-list"></tbody>
+    </table>
+
+    <div class="buttons">
+        <a href="#" id="whatsapp" target="_blank">ارسال به واتساپ</a>
+        <a href="#" id="rubika" class="rubika" target="_blank">ارسال به روبیکا</a>
+    </div>
+
+<script>
+const products = [
+    { code: "2401", name: "چای کله مورچه ای شکسته", weight: "5 کیلویی" },
+    { code: "2402", name: "چای شکسته ممتاز", weight: "5 کیلویی" },
+    { code: "2403", name: "چای ممتاز طلایی", weight: "5 کیلویی" },
+    { code: "2404", name: "چای شکسته ویژه", weight: "5 کیلویی" },
+    { code: "2405", name: "چای قلم درشت", weight: "5 کیلویی" }
+];
+
+const listContainer = document.getElementById("product-list");
+products.forEach((product, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${product.code}</td>
+        <td>${product.name}</td>
+        <td><input type='number' min='0' value='0'></td>
+        <td>${product.weight}</td>
+        <td id='order-${index}'></td>
+    `;
+    listContainer.appendChild(row);
+});
+
+function generateMessage() {
+    let message = "سفارش جدید از کرخه:%0A";
+    products.forEach((product, i) => {
+        const qty = document.querySelectorAll("tbody tr td input")[i].value;
+        if (qty > 0) {
+            message += `${i + 1}- ${product.name} (${product.code}) : ${qty} عدد%0A`;
+        }
+    });
+    return message;
+}
+
+function updateLinks() {
+    const text = generateMessage();
+    document.getElementById("whatsapp").href = `https://wa.me/989020021800?text=${text}`;
+    document.getElementById("rubika").href = `https://rubika.ir/ARahimpoor?text=${text}`;
+}
+
+document.querySelector("#product-list").addEventListener("input", updateLinks);
+</script>
+</body>
+</html>
